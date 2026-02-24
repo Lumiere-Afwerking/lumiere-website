@@ -5,6 +5,8 @@ import {
   Sparkles, ShieldCheck, Leaf, Layers, Hammer, Wind, Loader2,
   Star, Quote, Coffee, FileText, PenTool
 } from 'lucide-react';
+import { Studio } from 'sanity';
+import config from '../sanity.config.js';
 
 /* =========================================
    SEO CONTENT DATA
@@ -486,8 +488,26 @@ const GenericLandingPage = ({ pageData }) => (
 
 export default function App() {
   const [currentRoute, setCurrentRoute] = useState('home');
-  useEffect(() => { window.scrollTo(0, 0); }, [currentRoute]);
 
+  // Checken of we naar het dashboard willen
+  useEffect(() => { 
+    if (window.location.pathname === '/studio') {
+      setCurrentRoute('studio');
+    } else {
+      window.scrollTo(0, 0); 
+    }
+  }, [currentRoute]);
+
+  // Als we naar /studio gaan, laad dan het Sanity Dashboard in
+  if (currentRoute === 'studio') {
+    return (
+      <div className="h-screen w-full">
+        <Studio config={config} />
+      </div>
+    );
+  }
+
+  // De normale website
   return (
     <div className="min-h-screen bg-[#EAE6DF] font-sans text-[#3A3530] selection:bg-[#B07D54] selection:text-white">
       <style dangerouslySetInnerHTML={{__html: `
