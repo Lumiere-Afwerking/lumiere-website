@@ -19,7 +19,7 @@ export default {
       name: 'verhaal2', 
       title: 'Paragraaf 2', 
       type: 'text',
-      description: 'Het tweede deel van je verhaal (bijv. over je werkwijze in Rotterdam)'
+      description: 'Het tweede deel van je verhaal (bijv. over je visie in Rotterdam)'
     },
     { 
       name: 'foto', 
