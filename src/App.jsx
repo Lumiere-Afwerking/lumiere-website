@@ -488,18 +488,10 @@ const GenericLandingPage = ({ pageData }) => (
 
 export default function App() {
   const [currentRoute, setCurrentRoute] = useState('home');
+  const isStudio = window.location.pathname.startsWith('/studio');
 
-  // Checken of we naar het dashboard willen
-  useEffect(() => { 
-    if (window.location.pathname === '/studio') {
-      setCurrentRoute('studio');
-    } else {
-      window.scrollTo(0, 0); 
-    }
-  }, [currentRoute]);
-
-  // Als we naar /studio gaan, laad dan het Sanity Dashboard in
-  if (currentRoute === 'studio') {
+  // Als we naar jouwdomein.nl/studio gaan, laad dan het veilige dashboard in
+  if (isStudio) {
     return (
       <div className="h-screen w-full">
         <Studio config={config} />
@@ -507,7 +499,9 @@ export default function App() {
     );
   }
 
-  // De normale website
+  // De normale website voor je klanten
+  useEffect(() => { window.scrollTo(0, 0); }, [currentRoute]);
+
   return (
     <div className="min-h-screen bg-[#EAE6DF] font-sans text-[#3A3530] selection:bg-[#B07D54] selection:text-white">
       <style dangerouslySetInnerHTML={{__html: `
