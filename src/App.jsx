@@ -901,7 +901,7 @@ function GenericLandingPage({ navigate, pageData }) {
           <p className="text-lg font-light text-[#3A3530]/80 mb-8 leading-relaxed">{pageData.heroText}</p>
           <div className="flex flex-col sm:flex-row gap-4">
             <button onClick={() => { window.scrollTo(0,0); navigate('offerte'); }} className="bg-[#3A3530] text-[#EAE6DF] px-8 py-4 text-sm tracking-widest uppercase hover:bg-[#B07D54] transition-colors text-center">Vraag Prijsindicatie Aan</button>
-            <a href="tel:+31612345678" className="border border-[#3A3530] text-[#3A3530] px-8 py-4 text-sm tracking-widest uppercase hover:bg-[#3A3530] hover:text-[#EAE6DF] transition-colors text-center flex items-center justify-center"><Phone size={16} className="mr-2" /> Bel Direct</a>
+            <a href="tel:+31622873096" className="border border-[#3A3530] text-[#3A3530] px-8 py-4 text-sm tracking-widest uppercase hover:bg-[#3A3530] hover:text-[#EAE6DF] transition-colors text-center flex items-center justify-center"><Phone size={16} className="mr-2" /> Bel Direct</a>
           </div>
         </div>
         <div className="w-full lg:w-1/2">
@@ -968,7 +968,7 @@ export default function App() {
 
       {/* WHATSAPP FLOATING BUTTON */}
       <a 
-        href="https://wa.me/31612345678?text=Beste%20Lumière,%20ik%20heb%20een%20korte%20vraag%20over%20mijn%20project." 
+        href="https://wa.me/31622873096?text=Beste%20Lumière,%20ik%20heb%20een%20korte%20vraag%20over%20mijn%20project." 
         target="_blank" 
         rel="noopener noreferrer" 
         className="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white p-4 rounded-full shadow-[0_10px_30px_rgba(37,211,102,0.4)] hover:scale-110 transition-transform duration-300 flex items-center justify-center cursor-pointer group"
