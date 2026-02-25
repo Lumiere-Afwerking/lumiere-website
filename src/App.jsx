@@ -901,7 +901,7 @@ function GenericLandingPage({ navigate, pageData }) {
           <p className="text-lg font-light text-[#3A3530]/80 mb-8 leading-relaxed">{pageData.heroText}</p>
           <div className="flex flex-col sm:flex-row gap-4">
             <button onClick={() => { window.scrollTo(0,0); navigate('offerte'); }} className="bg-[#3A3530] text-[#EAE6DF] px-8 py-4 text-sm tracking-widest uppercase hover:bg-[#B07D54] transition-colors text-center">Vraag Prijsindicatie Aan</button>
-            <a href="tel:+31622873096" className="border border-[#3A3530] text-[#3A3530] px-8 py-4 text-sm tracking-widest uppercase hover:bg-[#3A3530] hover:text-[#EAE6DF] transition-colors text-center flex items-center justify-center"><Phone size={16} className="mr-2" /> Bel Direct</a>
+            <a href="tel:+31612345678" className="border border-[#3A3530] text-[#3A3530] px-8 py-4 text-sm tracking-widest uppercase hover:bg-[#3A3530] hover:text-[#EAE6DF] transition-colors text-center flex items-center justify-center"><Phone size={16} className="mr-2" /> Bel Direct</a>
           </div>
         </div>
         <div className="w-full lg:w-1/2">
@@ -939,10 +939,46 @@ function GenericLandingPage({ navigate, pageData }) {
 }
 
 /* =========================================
-   MAIN APP ROUTER
+   MAIN APP ROUTER (Smart URL Routing)
    ========================================= */
 export default function App() {
-  const [currentRoute, setCurrentRoute] = useState('home');
+  
+  // Lees de huidige URL uit bij het laden van de website
+  const getInitialRoute = () => {
+    const path = window.location.pathname.substring(1); // Verwijder de '/'
+    if (!path) return 'home';
+    
+    // Controleer of het een geldige pagina is
+    if (SEO_PAGES[path] || ['home', 'over-ons', 'werkwijze', 'portfolio', 'offerte'].includes(path)) {
+      return path;
+    }
+    return 'home'; // Als URL niet bestaat, ga naar home
+  };
+
+  const [currentRoute, setCurrentRoute] = useState(getInitialRoute());
+
+  // Deze functie update niet alleen de pagina, maar ook de URL in de browser!
+  // Aangepast: Fallback voor de online preview omgeving (voorkomt SecurityError)
+  const handleNavigate = (route) => {
+    try {
+      window.history.pushState({}, '', `/${route === 'home' ? '' : route}`);
+    } catch (e) {
+      // In de online preview editor kan pushState soms een error geven vanwege iframe restricties.
+      // We negeren de error hier zodat de knoppen wel gewoon blijven werken.
+      console.log('URL bar update disabled in this preview environment.');
+    }
+    setCurrentRoute(route);
+    window.scrollTo(0, 0);
+  };
+
+  // Luister naar de "Vorige" en "Volgende" knoppen in de browser van de gebruiker
+  useEffect(() => {
+    const handlePopState = () => {
+      setCurrentRoute(getInitialRoute());
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#EAE6DF] font-sans text-[#3A3530] selection:bg-[#B07D54] selection:text-white">
@@ -955,15 +991,16 @@ export default function App() {
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
       `}} />
       
-      <Navigation navigate={setCurrentRoute} currentRoute={currentRoute} />
+      {/* Geef de slimme navigatie functie door aan alle componenten */}
+      <Navigation navigate={handleNavigate} currentRoute={currentRoute} />
       
       <div className="flex-grow">
-        {currentRoute === 'home' && <HomePage navigate={setCurrentRoute} />}
-        {currentRoute === 'over-ons' && <OverOnsPage navigate={setCurrentRoute} />}
-        {currentRoute === 'werkwijze' && <WerkwijzePage navigate={setCurrentRoute} />}
-        {currentRoute === 'portfolio' && <PortfolioPage navigate={setCurrentRoute} />}
+        {currentRoute === 'home' && <HomePage navigate={handleNavigate} />}
+        {currentRoute === 'over-ons' && <OverOnsPage navigate={handleNavigate} />}
+        {currentRoute === 'werkwijze' && <WerkwijzePage navigate={handleNavigate} />}
+        {currentRoute === 'portfolio' && <PortfolioPage navigate={handleNavigate} />}
         {currentRoute === 'offerte' && <OffertePage />}
-        {SEO_PAGES[currentRoute] && <GenericLandingPage pageData={SEO_PAGES[currentRoute]} navigate={setCurrentRoute} />}
+        {SEO_PAGES[currentRoute] && <GenericLandingPage pageData={SEO_PAGES[currentRoute]} navigate={handleNavigate} />}
       </div>
 
       {/* WHATSAPP FLOATING BUTTON */}
